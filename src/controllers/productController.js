@@ -1,5 +1,17 @@
 import { query } from "../query/query.js";
 import TABLES from "../config/tables.js";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const getProducts = (req, res) => {
   const sql = `SELECT * FROM ${TABLES.PRODUCTS}`;
@@ -19,12 +31,14 @@ const addProduct = (req, res) => {
     limited_id,
   } = req.body;
 
+  //need to add image uploading fn...
+
   const sql =
     "INSERT INTO products (name, description, price, category, status, images, link, limited_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
   query(
     sql,
-    [name, description, price, category, status, images, link, limited_id],
+    [name, description, price, category, status, "", link, limited_id],
     res,
     true
   );
@@ -33,32 +47,36 @@ const addProduct = (req, res) => {
 const deleteProduct = (req, res) => {
   const { id } = req.params;
 
-  const sql = `DELETE * FROM ${TABLES.PRODUCTS} WHERE id=${id}`;
+  const sql = `DELETE FROM products WHERE id=?`;
 
-  query(sql, res, true);
+  query(sql, [id], res, true);
 };
 
 const updateProduct = (req, res) => {
   const { id } = req.params;
-  const { title, tags, description, singers, writers } = req.body;
+  const {
+    name,
+    description,
+    price,
+    category,
+    status,
+    images,
+    link,
+    limited_id,
+  } = req.body;
 
   const sql = `
       UPDATE products 
       SET name = ?, description = ?, price = ?, category = ?, status = ?, images = ?, link = ?, limited_id = ?
-      WHERE id = ?
+      WHERE id = ${id}
     `;
 
-  const values = [
-    req.user.userId,
-    title,
-    tags,
-    description,
-    singers,
-    writers,
-    id,
-  ];
-
-  query(sql, values, res, true);
+  query(
+    sql,
+    [name, description, price, category, status, "", link, limited_id],
+    res,
+    true
+  );
 };
 
 export { getProducts, addProduct, deleteProduct, updateProduct };

@@ -1,5 +1,5 @@
 {
-  "name": "thebeatsbeyonsbackend",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "main/server.js",
@@ -24,6 +24,7 @@
     "express": "^4.19.2",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3"
@@ -33,6 +34,7 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@eslint/js": "^9.8.0",
+    "@types/express": "^5.0.0",
     "eslint": "^9.8.0",
     "eslint-plugin-react": "^7.35.0",
     "globals": "^15.9.0"
